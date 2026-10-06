@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+/* Palette taken from The Living Valley (thelivingvalley.earthbornegames.com). */
+:root {
+  --ifm-color-primary: #0b281d;
+  --ifm-color-primary-dark: #051711;
+  --ifm-color-primary-darker: #051610;
+  --ifm-color-primary-darkest: #04120d;
+  --ifm-color-primary-light: #071d15;
+  --ifm-color-primary-lighter: #071e16;
+  --ifm-color-primary-lightest: #082219;
+  --ifm-color-primary-contrast-foreground: #1e4131;
+  --ifm-color-primary-contrast-background: #fafae2;
+  --ifm-background-color: ivory;
+  --ifm-color-secondary: #fafae2;
+  --ifm-color-white: #fafae2;
+  --ifm-color-black: #0b281d;
+  --ifm-color-content: #1e4131;
+  --ifm-heading-color: #1e4131;
+  --ifm-footer-background-color: #1e4131;
+  --ifm-footer-link-hover-color: #fafae2;
+  --ifm-button-background-color: #1e4131;
+  --ifm-global-radius: 0.2rem;
+  --ifm-font-family-base: 'Josefin Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Helvetica, Arial, sans-serif;
+  --guide-option-background: #d1e4ff;
+  --guide-log-color: #6282c1;
+  --guide-red: #c00b0b;
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #fafae2;
+  --ifm-color-primary-dark: #f3f3b9;
+  --ifm-color-primary-darker: #f0f0a5;
+  --ifm-color-primary-darkest: #e5e568;
+  --ifm-color-primary-light: #fff;
+  --ifm-color-primary-lighter: #fff;
+  --ifm-color-primary-lightest: #fff;
+  --ifm-color-primary-contrast-foreground: #fafae2;
+  --ifm-color-primary-contrast-background: #0b281d;
+  --ifm-background-surface-color: #061913;
+  --ifm-background-color: #1e4131;
+  --ifm-heading-color: #fafae2;
+  --ifm-color-content: #fafae2;
+  --ifm-menu-color: #fafae2;
+  --ifm-button-color: #0b281d;
+  --ifm-button-background-color: #fafae2;
+  --ifm-button-border-color: #fafae2;
+  --guide-option-background: #52749a;
+  --guide-log-color: #b5ccfa;
+  --guide-red: #ec8b8b;
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #061913;
+}
+
+.hero--primary {
+  --ifm-hero-background-color: #0b281d;
+  --ifm-hero-text-color: #fafae2;
+}
+
+.hero__title {
+  color: #fafae2;
+}
+
+.menu__link--active {
+  font-weight: var(--ifm-font-weight-bold);
+}
+
+.markdown p,
+.markdown li {
+  font-size: 110%;
+}
+
+/* Story text: boxed like the official campaign guides. */
+.markdown blockquote {
+  padding: 20px;
+  border: 1px solid #ffbd64;
+  border-right: none;
+  background-color: #fafae226;
+  color: inherit;
+}
+
+/* Heading sizes and banner headings as in the official guides:
+   h4 = "RANGERS CHOOSE:", h5 = "RESOLVE THE FOLLOWING ...". */
+.markdown > h2 {
+  --ifm-h2-font-size: 1.5rem;
+}
+
+.markdown > h3 {
+  --ifm-h3-font-size: 1.25rem;
+}
+
+.markdown h4,
+.markdown h5 {
+  font-size: 120%;
+  text-align: center;
+  text-transform: uppercase;
+  color: #0b281d;
+}
+
+.markdown h4 {
+  padding: 10px 0 5px;
+  background-color: #ffcf8f;
+}
+
+.markdown h5 {
+  padding: 10px 10px 5px;
+  background-color: #dbe5ff;
+}
+
+[data-theme='dark'] .markdown h5 {
+  background-color: #80aeff;
+}
+
+/* "If ... go to ..." rows, alternating highlighted and clear. */
+.guide-options {
+  margin-bottom: var(--ifm-leading);
+}
+
+.guide-option {
+  padding: 10px 15px 7px;
+  font-size: 110%;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.guide-option:nth-child(odd) {
+  background-color: var(--guide-option-background);
+}
+
+.markdown .guide-option p,
+.markdown .guide-option ul,
+.markdown .guide-option li {
+  margin-bottom: 0;
+  font-size: 100%;
+}
+
+.guide-option a {
+  text-decoration: underline;
+}
+
+.guide-option svg[aria-label='harm'] {
+  color: var(--guide-red);
+}
+
+.markdown .guide-choice {
+  color: var(--guide-red);
+  font-weight: 700;
+}
+
+.guide-log {
+  color: var(--guide-log-color);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* A tracker entry used as a label above its text, as in "read the text following each entry". */
+.markdown blockquote > .guide-log {
+  display: block;
+  margin-bottom: var(--ifm-paragraph-margin-bottom);
+}
+
+.markdown .guide-objective {
+  color: var(--guide-log-color);
+  font-weight: 700;
+  font-style: italic;
+}
+
+@media print {
+  .navbar,
+  .footer,
+  .theme-doc-sidebar-container,
+  .theme-doc-toc-desktop,
+  .theme-doc-toc-mobile,
+  .pagination-nav,
+  .theme-doc-breadcrumbs {
+    display: none !important;
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "peril-in-ancestors-grove": {
+    "title": "Peril in Ancestor's Grove",
+    "author": "Filippo \"Pence\"",
+    "summary": "A stand-alone, three-day adventure in the style of the One-Day Missions. A wounded buck near an ancient ruin hints at a malady that threatens the balance of the forest.",
+    "guidePdf": "peril-in-ancestors-grove-guide.pdf",
+    "cards": [
+      {
+        "id": "90001",
+        "front": {
+          "file": "90001A.jpg",
+          "name": "Wounded Buck"
+        },
+        "back": {
+          "file": "90001B.jpg",
+          "name": "Wounded Buck - Pt.2"
+        }
+      },
+      {
+        "id": "90002",
+        "front": {
+          "file": "90002A.jpg",
+          "name": "Chase the Threat"
+        },
+        "back": {
+          "file": "90002B.jpg",
+          "name": "Remove the Threat"
+        }
+      }
+    ]
+  },
+  "missing-supplies": {
+    "title": "Missing Supplies",
+    "author": "Filippo \"Pence\"",
+    "summary": "A stand-alone investigation for 1 to 24 players in up to 6 groups. Supplies are disappearing from Ranger caches across the Valley: visit the caches, gather clues and work out who is responsible.",
+    "guidePdf": "missing-supplies-guide.pdf",
+    "cards": [
+      {
+        "id": "90004A",
+        "front": {
+          "file": "90004A.jpg",
+          "name": "Find a Ranger"
+        },
+        "back": {
+          "file": "90007B.jpg",
+          "name": "Back to Spire"
+        }
+      },
+      {
+        "id": "90004B",
+        "front": {
+          "file": "90004B.jpg",
+          "name": "Upper Maintenance"
+        },
+        "back": {
+          "file": "90004B.jpg",
+          "name": "Upper Maintenance"
+        }
+      },
+      {
+        "id": "90005A",
+        "front": {
+          "file": "90005A.jpg",
+          "name": "Upper West Maintenance"
+        },
+        "back": {
+          "file": "90005A.jpg",
+          "name": "Upper West Maintenance"
+        }
+      },
+      {
+        "id": "90005B",
+        "front": {
+          "file": "90005B.jpg",
+          "name": "Upper East Maintenance"
+        },
+        "back": {
+          "file": "90005B.jpg",
+          "name": "Upper East Maintenance"
+        }
+      },
+      {
+        "id": "90006A",
+        "front": {
+          "file": "90006A.jpg",
+          "name": "Midwest Maintenance"
+        },
+        "back": {
+          "file": "90006A.jpg",
+          "name": "Midwest Maintenance"
+        }
+      },
+      {
+        "id": "90006B",
+        "front": {
+          "file": "90006B.jpg",
+          "name": "Mideast Maintenance"
+        },
+        "back": {
+          "file": "90006B.jpg",
+          "name": "Mideast Maintenance"
+        }
+      },
+      {
+        "id": "90007A",
+        "front": {
+          "file": "90007A.jpg",
+          "name": "Lower Maintenance"
+        },
+        "back": {
+          "file": "90007A.jpg",
+          "name": "Lower Maintenance"
+        }
+      }
+    ]
+  }
+}
