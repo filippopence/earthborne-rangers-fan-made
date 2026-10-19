@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import useBaseUrl from '@docusaurus/useBaseUrl';
-import adventures from '@site/src/data/adventures.json';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import Translate, {translate} from '@docusaurus/Translate';
+import {useAdventure} from '@site/src/data/useAdventure';
 import styles from './GameCard.module.css';
 
 function useCardSides(adventure, card) {
-  const base = useBaseUrl(`/cards/${adventure}/`);
-  const data = adventures[adventure]?.cards.find((c) => c.id === card);
+  const {cards, cardFolder} = useAdventure(adventure);
+  const base = useBaseUrl(`/cards/${adventure}/${cardFolder}`);
+  const data = cards.find((c) => c.id === card);
   if (!data) {
     throw new Error(`Unknown card "${card}" in adventure "${adventure}"`);
   }
@@ -41,7 +44,7 @@ export default function GameCard({adventure, card, side = 'front', inline = fals
           setShown(initial);
           setOpen(true);
         }}
-        title={`${thumb.name} (click to enlarge)`}>
+        title={translate({id: 'card.enlarge', message: '{name} (click to enlarge)'}, {name: thumb.name})}>
         <img src={thumb.src} alt={thumb.name} loading="lazy" />
         <span className={styles.caption}>{thumb.name}</span>
       </button>
@@ -54,11 +57,11 @@ export default function GameCard({adventure, card, side = 'front', inline = fals
                 type="button"
                 className="button button--primary"
                 onClick={() => setShown((shown + 1) % sides.length)}>
-                Flip card
+                <Translate id="card.flip">Flip card</Translate>
               </button>
             )}
             <button type="button" className="button button--secondary" onClick={() => setOpen(false)}>
-              Close
+              <Translate id="card.close">Close</Translate>
             </button>
           </div>
         </div>
@@ -69,9 +72,10 @@ export default function GameCard({adventure, card, side = 'front', inline = fals
 
 // Every card of an adventure, both faces side by side.
 export function CardGallery({adventure}) {
+  const {cards} = useAdventure(adventure);
   return (
     <div className={styles.gallery}>
-      {adventures[adventure].cards.map((card) => (
+      {cards.map((card) => (
         <React.Fragment key={card.id}>
           <GameCard adventure={adventure} card={card.id} inline />
           {card.back && card.back.file !== card.front.file && (

@@ -27,7 +27,13 @@
           "name": "Remove the Threat"
         }
       }
-    ]
+    ],
+    "translations": {
+      "it": {
+        "title": "Minaccia al Boschetto degli Antenati",
+        "summary": "Un’avventura autonoma di tre giornate, nello stile delle Missioni Giornaliere. Un cervo ferito vicino a un’antica rovina fa pensare a un male che minaccia l’equilibrio della foresta."
+      }
+    }
   },
   "missing-supplies": {
     "title": "Missing Supplies",

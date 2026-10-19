@@ -22,7 +22,11 @@ const config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'it'],
+    localeConfigs: {
+      en: {label: 'English', htmlLang: 'en'},
+      it: {label: 'Italiano', htmlLang: 'it'},
+    },
   },
 
   presets: [
@@ -58,6 +62,7 @@ const config = {
           },
           {to: '/docs/resources', label: 'Resources', position: 'left'},
           {to: '/docs/about', label: 'About', position: 'left'},
+          {type: 'localeDropdown', position: 'right'},
           {
             href: 'https://github.com/filippopence/earthborne-rangers-fan-made',
             label: 'GitHub',

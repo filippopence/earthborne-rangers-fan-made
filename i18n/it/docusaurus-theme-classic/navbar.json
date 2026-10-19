@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Earthborne Rangers Fan-Made",
+    "description": "The title in the navbar"
+  },
+  "item.label.Campaign Guides": {
+    "message": "Guide alla Campagna",
+    "description": "Navbar item with label Campaign Guides"
+  },
+  "item.label.Resources": {
+    "message": "Risorse",
+    "description": "Navbar item with label Resources"
+  },
+  "item.label.About": {
+    "message": "Informazioni",
+    "description": "Navbar item with label About"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

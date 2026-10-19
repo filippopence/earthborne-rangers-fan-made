@@ -9,11 +9,13 @@ const missions = (slug, count) =>
 function adventure(slug, label, missionCount, sections = []) {
   return {
     type: 'category',
+    key: slug,
     label,
     link: {type: 'doc', id: `${slug}/index`},
     items: [
       {
         type: 'category',
+        key: `${slug}-missions`,
         label: '1. Missions',
         link: {type: 'doc', id: `${slug}/missions/index`},
         items: missions(slug, missionCount),

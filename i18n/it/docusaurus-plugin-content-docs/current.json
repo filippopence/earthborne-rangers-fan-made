@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.guides.category.peril-in-ancestors-grove": {
+    "message": "Minaccia al Boschetto degli Antenati",
+    "description": "The label for category 'Peril in Ancestor's Grove' in sidebar 'guides'"
+  },
+  "sidebar.guides.category.peril-in-ancestors-grove-missions": {
+    "message": "1. Missioni",
+    "description": "The label for category '1. Missions' in sidebar 'guides'"
+  },
+  "sidebar.guides.category.missing-supplies": {
+    "message": "Missing Supplies",
+    "description": "The label for category 'Missing Supplies' in sidebar 'guides'"
+  },
+  "sidebar.guides.category.missing-supplies-missions": {
+    "message": "1. Missions",
+    "description": "The label for category '1. Missions' in sidebar 'guides'"
+  }
+}

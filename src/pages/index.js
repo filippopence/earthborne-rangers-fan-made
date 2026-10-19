@@ -3,10 +3,11 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
-import adventures from '@site/src/data/adventures.json';
+import Translate from '@docusaurus/Translate';
+import {useAdventures} from '@site/src/data/useAdventure';
 
 function AdventureCard({slug, adventure}) {
-  const cover = useBaseUrl(`/cards/${slug}/${adventure.cards[0].front.file}`);
+  const cover = useBaseUrl(`/cards/${slug}/${adventure.cardFolder}${adventure.cards[0].front.file}`);
   return (
     <div className="col col--6 margin-bottom--lg">
       <div className="card">
@@ -24,10 +25,10 @@ function AdventureCard({slug, adventure}) {
         <div className="card__footer">
           <div className="button-group button-group--block">
             <Link className="button button--primary" to={`/docs/${slug}`}>
-              Read the guide
+              <Translate id="home.readGuide">Read the guide</Translate>
             </Link>
             <Link className="button button--outline button--primary" to={`/docs/${slug}/download`}>
-              Download &amp; print
+              <Translate id="home.download">Download &amp; print</Translate>
             </Link>
           </div>
         </div>
@@ -45,12 +46,16 @@ export default function Home() {
           <Heading as="h1" className="hero__title">
             {siteConfig.title}
           </Heading>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <p className="hero__subtitle">
+            <Translate id="home.tagline">
+              {'Unofficial fan-made adventures for Earthborne Rangers, by Filippo "Pence"'}
+            </Translate>
+          </p>
         </div>
       </header>
       <main className="container margin-vert--lg">
         <div className="row">
-          {Object.entries(adventures).map(([slug, adventure]) => (
+          {useAdventures().map(([slug, adventure]) => (
             <AdventureCard key={slug} slug={slug} adventure={adventure} />
           ))}
         </div>
