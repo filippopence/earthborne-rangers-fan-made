@@ -94,23 +94,53 @@ async function drawSheet(pdf, font, images, label, mirrored) {
   page.drawText(label, {x: cellX(0), y: 4 * MM, size: 7, font, color: rgb(0.35, 0.35, 0.35)});
 }
 
-const NOTE = 'unofficial fan-made content - print at 100% (actual size) - cut on the marks';
+// Texts of the PDFs and of the ZIP readme, per language.
+const TEXT = {
+  en: {
+    note: 'unofficial fan-made content - print at 100% (actual size) - cut on the marks',
+    fronts: 'fronts',
+    backs: 'backs (duplex, flip on long edge)',
+    suffix: '',
+    readme: (title, author) =>
+      `${title} - unofficial fan-made cards by ${author}\n\n` +
+      'screen/  750 x 1050 px, no bleed: for digital play.\n' +
+      'print/   1650 x 2250 px at 600 dpi: the card (63.5 x 88.9 mm) plus 1/8 in (3.175 mm)\n' +
+      '         of bleed on every side, for print services.\n',
+  },
+  it: {
+    note: 'contenuto fan-made non ufficiale - stampare al 100% (dimensione reale) - tagliare sui segni',
+    fronts: 'fronti',
+    backs: 'retri (fronte-retro, girare sul lato lungo)',
+    suffix: '-it',
+    readme: (title, author) =>
+      `${title} - carte fan-made non ufficiali di ${author}\n\n` +
+      'screen/  750 x 1050 px, senza abbondanza: per il gioco digitale.\n' +
+      'print/   1650 x 2250 px a 600 dpi: la carta (63,5 x 88,9 mm) piu 1/8 di pollice (3,175 mm)\n' +
+      '         di abbondanza su ogni lato, per le copisterie.\n',
+  },
+};
+const NOTE = TEXT.en.note;
 
 const adventures = await readJson('src/data/adventures.json');
 for (const [slug, adventure] of Object.entries(adventures)) {
+  // English always; plus every language that has its own cards (translations.<locale>.cards).
+  const locales = ['en', ...Object.keys(adventure.translations ?? {}).filter((l) => adventure.translations[l].cards)];
+  for (const loc of locales) await buildAdventure(slug, adventure, loc);
+}
+
+async function buildAdventure(slug, adventure, loc) {
+  const t = TEXT[loc];
+  const tr = adventure.translations?.[loc];
+  const title = tr?.title ?? adventure.title;
+  const cards = tr?.cards ?? adventure.cards;
+  const sub = loc === 'en' ? '' : `${loc}/`;
   const outDir = path.join(root, 'static/downloads', slug);
   await fs.mkdir(outDir, {recursive: true});
 
   const zip = new JSZip();
-  zip.file(
-    'README.txt',
-    `${adventure.title} - unofficial fan-made cards by ${adventure.author}\n\n` +
-      'screen/  750 x 1050 px, no bleed: for digital play.\n' +
-      'print/   1650 x 2250 px at 600 dpi: the card (63.5 x 88.9 mm) plus 1/8 in (3.175 mm)\n' +
-      '         of bleed on every side, for print services.\n',
-  );
+  zip.file('README.txt', t.readme(title, adventure.author));
   const pdf = await PDFDocument.create();
-  pdf.setTitle(`${adventure.title} - print and play`);
+  pdf.setTitle(`${title} - print and play`);
   pdf.setAuthor(adventure.author);
   const font = await pdf.embedFont(StandardFonts.Helvetica);
 
@@ -122,33 +152,33 @@ for (const [slug, adventure] of Object.entries(adventures)) {
   };
 
   const perSheet = COLS * ROWS;
-  for (let start = 0; start < adventure.cards.length; start += perSheet) {
+  for (let start = 0; start < cards.length; start += perSheet) {
     const fronts = [];
     const backs = [];
-    for (const card of adventure.cards.slice(start, start + perSheet)) {
+    for (const card of cards.slice(start, start + perSheet)) {
       for (const [side, list] of [[card.front, fronts], [card.back, backs]]) {
         if (!side) {
           list.push(null);
           continue;
         }
-        const print = await fs.readFile(path.join(root, 'print-cards', slug, side.file));
+        const print = await fs.readFile(path.join(root, 'print-cards', slug, sub, side.file));
         zip.file(`print/${side.file}`, print);
-        zip.file(`screen/${side.file}`, await fs.readFile(path.join(root, 'static/cards', slug, side.file)));
+        zip.file(`screen/${side.file}`, await fs.readFile(path.join(root, 'static/cards', slug, sub, side.file)));
         list.push(await embed(side.file, print));
       }
     }
-    await drawSheet(pdf, font, fronts, `${adventure.title} - ${NOTE} - fronts`, false);
+    await drawSheet(pdf, font, fronts, `${title} - ${t.note} - ${t.fronts}`, false);
     if (backs.some(Boolean)) {
-      await drawSheet(pdf, font, backs, `${adventure.title} - ${NOTE} - backs (duplex, flip on long edge)`, true);
+      await drawSheet(pdf, font, backs, `${title} - ${t.note} - ${t.backs}`, true);
     }
   }
 
-  await fs.writeFile(path.join(outDir, `${slug}-print-and-play.pdf`), await pdf.save());
+  await fs.writeFile(path.join(outDir, `${slug}-print-and-play${t.suffix}.pdf`), await pdf.save());
   await fs.writeFile(
-    path.join(outDir, `${slug}-cards.zip`),
+    path.join(outDir, `${slug}-cards${t.suffix}.zip`),
     await zip.generateAsync({type: 'nodebuffer'}),
   );
-  console.log(`[downloads] ${slug}: ${adventure.cards.length} cards`);
+  console.log(`[downloads] ${slug} (${loc}): ${cards.length} cards`);
 }
 
 const resources = await readJson('src/data/resources.json');

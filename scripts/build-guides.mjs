@@ -1,6 +1,7 @@
 // Builds a printable campaign guide PDF for every adventure from the built site,
 // so the PDF always matches the pages and the cards:
-//   static/downloads/<slug>/<slug>-guide.pdf   (A4 landscape, two columns)
+//   static/downloads/<slug>/<slug>-guide.pdf      (A4 landscape, two columns)
+//   static/downloads/<slug>/<slug>-guide-it.pdf   (same, in Italian, for adventures with an Italian translation)
 // Run with `npm run guides` (builds the site first; needs Google Chrome or Chromium).
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -32,8 +33,9 @@ function docIds(item) {
 
 const anchor = (id) => id.replace(/\/index$/, '').split('/').slice(1).join('-') || 'top';
 
-async function section(id) {
-  const file = path.join(root, 'build/docs', id.replace(/\/index$/, '') + '.html');
+async function section(id, loc) {
+  const prefix = loc === 'en' ? BASE : `${BASE}/${loc}`;
+  const file = path.join(root, loc === 'en' ? 'build' : `build/${loc}`, 'docs', id.replace(/\/index$/, '') + '.html');
   const page = await fs.readFile(file, 'utf8');
   const start = page.indexOf('<div class="theme-doc-markdown markdown">');
   let html = page.slice(start, page.indexOf('</article>', start));
@@ -41,9 +43,9 @@ async function section(id) {
     .replace(/<a [^>]*class="hash-link"[^>]*>.*?<\/a>/g, '')
     .replace(/ loading="lazy"/g, '')
     // the built HTML is minified, so attribute values may be unquoted
-    .replace(new RegExp(`src="?${BASE}/([^" >]+)"?`, 'g'), (_, file) => `src="${STATIC}/${file}"`)
+    .replace(new RegExp(`src="?${prefix}/([^" >]+)"?`, 'g'), (_, file) => `src="${STATIC}/${file}"`)
     // links between entries become links inside the PDF
-    .replace(new RegExp(`href="?${BASE}/docs/([^" >#]+)(#[^" >]*)?"?`, 'g'), (_, doc) => `href="#${anchor(doc)}"`);
+    .replace(new RegExp(`href="?${prefix}/docs/([^" >#]+)(#[^" >]*)?"?`, 'g'), (_, doc) => `href="#${anchor(doc)}"`);
   return `<section id="${anchor(id)}">${html}</section>`;
 }
 
@@ -82,24 +84,35 @@ button span { display: block; width: 36mm; margin-top: 0.8mm; font-size: 7.5pt; 
 footer { margin-top: 6mm; font-size: 8pt; opacity: 0.75; column-span: all; }
 `;
 
+const FOOTER = {
+  en: `Unofficial fan-made content, not affiliated with, endorsed or sponsored by Earthborne Games.
+Earthborne Rangers and all related names, artwork and icons are property of Earthborne Games.`,
+  it: `Contenuti fan-made non ufficiali, non affiliati, approvati o sponsorizzati da Earthborne Games.
+Earthborne Rangers e tutti i nomi, le illustrazioni e le icone correlati sono proprietà di Earthborne Games.`,
+};
+
 for (const item of sidebars.guides) {
   const slug = item.link?.id?.split('/')[0];
   if (!adventures[slug]) continue;
   const ids = docIds(item).filter((id) => !/\/(cards|download)$/.test(id));
-  const sections = await Promise.all(ids.map(section));
-  sections[0] = sections[0].replace('<section', '<section class="cover"');
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${adventures[slug].title}</title>
+  // English always; plus every language that has its own cards, so its pages are fully translated.
+  const locales = ['en', ...Object.keys(adventures[slug].translations ?? {}).filter((l) => adventures[slug].translations[l].cards)];
+  for (const loc of locales) {
+    const title = adventures[slug].translations?.[loc]?.title ?? adventures[slug].title;
+    const sections = await Promise.all(ids.map((id) => section(id, loc)));
+    sections[0] = sections[0].replace('<section', '<section class="cover"');
+    const html = `<!doctype html><html lang="${loc}"><head><meta charset="utf-8"><title>${title}</title>
 <style>${CSS}</style></head><body><main>${sections.join('\n')}
-<footer>Unofficial fan-made content, not affiliated with, endorsed or sponsored by Earthborne Games.
-Earthborne Rangers and all related names, artwork and icons are property of Earthborne Games.</footer></main></body></html>`;
-  const tmp = path.join(os.tmpdir(), `${slug}-guide.html`);
-  await fs.writeFile(tmp, html);
-  const out = path.join(root, 'static/downloads', slug, `${slug}-guide.pdf`);
-  execFileSync(
-    chrome,
-    ['--headless=new', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer', '--virtual-time-budget=8000',
-      `--print-to-pdf=${out}`, pathToFileURL(tmp).href],
-    {stdio: 'ignore'},
-  );
-  console.log(`[guides] ${slug}: ${ids.length} sections -> ${path.relative(root, out)}`);
+<footer>${FOOTER[loc]}</footer></main></body></html>`;
+    const tmp = path.join(os.tmpdir(), `${slug}-guide-${loc}.html`);
+    await fs.writeFile(tmp, html);
+    const out = path.join(root, 'static/downloads', slug, `${slug}-guide${loc === 'en' ? '' : `-${loc}`}.pdf`);
+    execFileSync(
+      chrome,
+      ['--headless=new', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer', '--virtual-time-budget=8000',
+        `--print-to-pdf=${out}`, pathToFileURL(tmp).href],
+      {stdio: 'ignore'},
+    );
+    console.log(`[guides] ${slug} (${loc}): ${ids.length} sections -> ${path.relative(root, out)}`);
+  }
 }

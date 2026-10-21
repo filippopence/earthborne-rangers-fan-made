@@ -31,7 +31,31 @@
     "translations": {
       "it": {
         "title": "Minaccia al Boschetto degli Antenati",
-        "summary": "Un’avventura autonoma di tre giornate, nello stile delle Missioni Giornaliere. Un cervo ferito vicino a un’antica rovina fa pensare a un male che minaccia l’equilibrio della foresta."
+        "summary": "Un’avventura autonoma di tre giornate, nello stile delle Missioni Giornaliere. Un cervo ferito vicino a un’antica rovina fa pensare a un male che minaccia l’equilibrio della foresta.",
+        "cards": [
+          {
+            "id": "90001",
+            "front": {
+              "file": "90001A.jpg",
+              "name": "Cervo Ferito"
+            },
+            "back": {
+              "file": "90001B.jpg",
+              "name": "Cervo Ferito - Pt.2"
+            }
+          },
+          {
+            "id": "90002",
+            "front": {
+              "file": "90002A.jpg",
+              "name": "Indagare sulla Minaccia"
+            },
+            "back": {
+              "file": "90002B.jpg",
+              "name": "Eliminare la Minaccia"
+            }
+          }
+        ]
       }
     }
   },
